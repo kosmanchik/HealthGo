@@ -16,7 +16,7 @@ class StartScreen extends StatelessWidget //виджет стартового э
         spacing: 97,
         children: [
           ImageSection("assets/images/start_screen_man.png"),         
-          Button(Icons.emoji_emotions_outlined, "СТАРТ", () {
+          Button(Icon(Icons.emoji_emotions_outlined), "СТАРТ", () {
             //функция перехода на страницу регистрации
             Navigator.push(
               context,
