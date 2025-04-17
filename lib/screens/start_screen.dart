@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_go/screens/registration_screen.dart';
 import '../supportive_widgets/image_section.dart';
-import '../supportive_widgets/button.dart';
+import '../supportive_widgets/button_icon.dart';
 
 class StartScreen extends StatelessWidget //виджет стартового экрана
 {
@@ -16,7 +16,7 @@ class StartScreen extends StatelessWidget //виджет стартового э
         spacing: 97,
         children: [
           ImageSection("assets/images/start_screen_man.png"),         
-          Button(Icon(Icons.emoji_emotions_outlined), 116.0, 56.0, "СТАРТ", () {
+          ButtonIcon(Icon(Icons.emoji_emotions_outlined), Size(116.0, 56.0), "СТАРТ", () {
             //функция перехода на страницу регистрации
             Navigator.push(
               context,

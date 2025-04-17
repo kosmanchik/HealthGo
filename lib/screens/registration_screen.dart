@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_go/screens/goal_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
-import '../supportive_widgets/button.dart';
+import '../supportive_widgets/button_icon.dart';
 import '../user/preferences.dart';
 
 // ignore: must_be_immutable
@@ -20,16 +20,17 @@ class RegistrationScreen extends StatelessWidget{
         spacing: 28,
         children: [
           ImageSection("assets/images/running_girl.png"),
-          Button(Icon(Icons.double_arrow_outlined), 116.0, 56.0, "Зайти как гость", () {
-            Navigator.push(
+          ButtonIcon(Icon(Icons.double_arrow_outlined), Size(116.0, 56.0), "Зайти как гость", () {
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) {
                 if (!_isRegitrated) {
                   return GoalScreen();
                 }
                 return TrainChooseScreen();
-              }
-              ));
+                }
+              ), 
+              (route) => false); //Очищение стэка экранов (незачем хранить экраны регистрации и старта, когда пользователь уже вошел)
           })
         ],
       ) 
