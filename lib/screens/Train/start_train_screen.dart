@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:health_go/screens/Train/exercise_screen.dart';
+import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
+import 'package:health_go/screens/Train/train.dart';
 
 class StartTrainScreen extends StatelessWidget{
-  const StartTrainScreen({super.key});
+  final List<Widget> _exercisesList;
+
+  const StartTrainScreen(this._exercisesList, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +54,7 @@ class StartTrainScreen extends StatelessWidget{
 
                     InkWell(
                       child: Text("Начать", style: GetClickTextStyle()),
-                      onTap: () =>
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(builder: (context) => ExerciseScreen(ImageSection('assets/images/bridge_exercise.png'), 130))
-                        )                  
+                      onTap: () => NavigateTrainScreens(context, _exercisesList),                  
                     )
                   ],
                 )
@@ -87,5 +87,17 @@ class StartTrainScreen extends StatelessWidget{
       fontWeight: FontWeight.w500,
       fontSize: 14
     );
+  }
+  
+  void NavigateTrainScreens(BuildContext context, List<Widget> exercisesScreens) async { //перемещение по массиву с упражнениями
+    for (var screen in exercisesScreens) {
+      if (!context.mounted) return;
+      await Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context) => screen));
+    }
+    Navigator.pushReplacement(
+      context, 
+      MaterialPageRoute(builder: (context) => TrainChooseScreen()));
   }
 }

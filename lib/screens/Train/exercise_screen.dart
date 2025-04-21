@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
-import 'dart:async';
 import 'package:health_go/supportive_widgets/button.dart';
 import 'package:health_go/supportive_widgets/time_container.dart';
-
+import 'dart:async';
 
 class ExerciseScreen extends StatefulWidget{
   
@@ -28,10 +27,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     StartTimer();
   }
 
-  @override
-  void dispose() {
+  void Destroy() {
     _timer.cancel();
-    super.dispose();
+    if (Navigator.canPop(context)){
+      Navigator.pop(context);
+    }
   }
 
   void StartTimer() {
@@ -41,7 +41,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       (Timer timer) {
         if (_remainingSeconds == 0) { //добавить звук окончания таймера
           setState(() {
-            timer.cancel();
+            Destroy();
           });
         } else {
           setState(() {
@@ -102,19 +102,48 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 8,
             children: [
-              Button(Size(127, 40), "Пропустить", () {}, Color(0xFFFFFFFF)),
+              Button(Size(127, 40), "Пропустить", () => 
+                  GetDialog(context, "Пропуск тренировки", "Вы точно хотите пропустить текущее упражнение?", () {
+                    Navigator.pop(context, 'OK'); //убираем диалоговое окно и потом уничтожаем экран
+                    Destroy();
+                  }),
+               Color(0xFFFFFFFF)),
 
-              //Перемещаем пользователя на экран выбора тренировок и очищаем стэк с экранами прошедших тренировок
-              Button(Size(127, 40), "Завершить", () => Navigator.pushAndRemoveUntil(
-                  context, 
-                  MaterialPageRoute(builder: (context) => TrainChooseScreen()),
-                  (route) => false
-                ), 
+              //Останавливаем таймер, перемещаем пользователя на экран выбора тренировок и очищаем стэк с экранами прошедших тренировок
+              Button(Size(127, 40), "Завершить", () => 
+                GetDialog(context, "Завершение тренировки", "Вы точно хотите завершить тренировку?", () {
+                  _timer.cancel();
+                  Navigator.pushAndRemoveUntil(
+                    context, 
+                    MaterialPageRoute(builder: (context) => TrainChooseScreen()),
+                    (route) => false
+                  );
+                }),
               Color(0xFFEADDFF)),
             ],
           ),
         ],
       ))
+    );
+  }
+
+  void GetDialog(BuildContext context, String title, String message, VoidCallback onPressedOK) {
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, "Отмена"), 
+            child: const Text("Отмена")
+          ),
+          TextButton(
+            onPressed: onPressedOK,
+            child: const Text('OK'),
+          ),
+        ],
+      )
     );
   }
 }

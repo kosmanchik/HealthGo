@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_go/screens/Train/train.dart';
 import 'package:health_go/screens/train/exercise_screen.dart';
 import 'package:health_go/screens/train/start_train_screen.dart';
 import 'package:health_go/supportive_widgets/button.dart';
@@ -22,21 +23,11 @@ class TrainChooseScreen extends StatelessWidget {
             Button(Size(353.0, 40.0), "Готовый план тренировок", () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StartTrainScreen())
+                MaterialPageRoute(builder: (context) => StartTrainScreen(Trains.classicTrain))
               );
             }, Color(0xFFECE6F0)),
-            Button(Size(353.0, 40.0), "Создание индивидуального плана", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => StartTrainScreen())
-              );
-            }, Color(0xFFECE6F0)),
-            Button(Size(353.0, 40.0), "Выбор отдельных упражнений", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => StartTrainScreen())
-              );
-            }, Color(0xFFECE6F0))
+            Button(Size(353.0, 40.0), "Создание индивидуального плана", () {}, Color(0xFFECE6F0)),
+            Button(Size(353.0, 40.0), "Выбор отдельных упражнений", () {}, Color(0xFFECE6F0))
           ],
         )
       ),
