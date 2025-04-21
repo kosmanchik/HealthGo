@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget
-{
-  final String _buttonText; //текст кнопки
-  final VoidCallback _onPressed; //функция, вызывающиеся на нажатие кнопки
-  final IconData _icon;
+class Button extends StatelessWidget {
 
-  const Button(this._icon, this._buttonText, this._onPressed, {super.key});
+  final VoidCallback _onPressed;
+  final String _buttonText;
+  final Color _buttonColor;
+  final Size _buttonSize;
+  const Button(this._buttonSize, this._buttonText, this._onPressed, this._buttonColor, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon( 
-        style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFECE6F0),
-        foregroundColor: Color(0xFF65558F),
-        minimumSize: Size(116.0, 56.0),
-        shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-      ),      
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: _buttonColor,
+        minimumSize: _buttonSize,
+        foregroundColor: Color(0xFF65558F)
+      ),
       onPressed: _onPressed, 
-      icon: Icon(_icon),
-      label: Text(_buttonText)
+      child: Text(_buttonText)
     );
   }
 }

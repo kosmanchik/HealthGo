@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^2.5.3
+  flutter_timer_countdown: ^1.0.7
 
 dev_dependencies:
   flutter_test:
