@@ -43,7 +43,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           setState(() {
             Destroy();
           });
-        } else {
+        } 
+        else {
           setState(() {
             _remainingSeconds--;
           });
@@ -64,66 +65,69 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(backgroundColor: Color(0xFFF3EDF7), automaticallyImplyLeading: false),
-
-      body: Center( child: Column (
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          widget._exerciseImage, //изображение упражнения
-
-          SizedBox(height: 16),
-
-          Container( //внешний контейнер для минут и секунд
-            height: 105,
-            width: 235,
-            decoration: BoxDecoration(
-              color: Color(0xFFECE6F0),
-              borderRadius: BorderRadius.circular(28)
+    return PopScope( 
+      canPop: false, //Переопределение работы кнопки "Назад" в Андроид (стрелочка влево)
+      child: Scaffold(
+        appBar: AppBar(backgroundColor: Color(0xFFF3EDF7), automaticallyImplyLeading: false),
+      
+        body: Center( child: Column (
+          mainAxisAlignment: MainAxisAlignment.center,
+      
+          children: [
+            widget._exerciseImage, //изображение упражнения
+      
+            SizedBox(height: 16),
+      
+            Container( //внешний контейнер для минут и секунд
+              height: 105,
+              width: 235,
+              decoration: BoxDecoration(
+                color: Color(0xFFECE6F0),
+                borderRadius: BorderRadius.circular(28)
+              ),
+              child: 
+                Row(children: [
+                  TimeContainer(GetMinutes(_remainingSeconds), Color(0xFFE7E7E7), EdgeInsets.only(left: 24, right: 0, bottom: 23, top: 5)),
+      
+                  Container( //разделитель минут и секунд
+                    margin: EdgeInsets.only(bottom: 23),
+                    child: Text(":", style: TextStyle(fontSize: 57, fontWeight: FontWeight.w400))
+                  ),
+      
+                  TimeContainer(GetSeconds(_remainingSeconds), Color(0xFFE6E0E9), EdgeInsets.only(right: 24, left: 0, bottom: 23, top: 5)),
+                ]
+              )
             ),
-            child: 
-              Row(children: [
-                TimeContainer(GetMinutes(_remainingSeconds), Color(0xFFE7E7E7), EdgeInsets.only(left: 24, right: 0, bottom: 23, top: 5)),
-
-                Container( //разделитель минут и секунд
-                  margin: EdgeInsets.only(bottom: 23),
-                  child: Text(":", style: TextStyle(fontSize: 57, fontWeight: FontWeight.w400))
-                ),
-
-                TimeContainer(GetSeconds(_remainingSeconds), Color(0xFFE6E0E9), EdgeInsets.only(right: 24, left: 0, bottom: 23, top: 5)),
-              ]
-            )
-          ),
-
-          SizedBox(height: 23),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 8,
-            children: [
-              Button(Size(127, 40), "Пропустить", () => 
-                  GetDialog(context, "Пропуск тренировки", "Вы точно хотите пропустить текущее упражнение?", () {
-                    Navigator.pop(context, 'OK'); //убираем диалоговое окно и потом уничтожаем экран
-                    Destroy();
+      
+            SizedBox(height: 23),
+      
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8,
+              children: [
+                Button(Size(127, 40), "Пропустить", () =>
+                    GetDialog(context, "Пропуск тренировки", "Вы точно хотите пропустить текущее упражнение?", () {
+                      Navigator.pop(context, 'OK'); //убираем диалоговое окно и потом уничтожаем экран
+                      Destroy();
+                    }),
+                  Color(0xFFFFFFFF)),
+      
+                //Останавливаем таймер, перемещаем пользователя на экран выбора тренировок и очищаем стэк с экранами прошедших тренировок
+                Button(Size(127, 40), "Завершить", () => 
+                  GetDialog(context, "Завершение тренировки", "Вы точно хотите завершить тренировку?", () {
+                    _timer.cancel();
+                    Navigator.pushAndRemoveUntil(
+                      context, 
+                      MaterialPageRoute(builder: (context) => TrainChooseScreen()),
+                      (route) => false
+                    );
                   }),
-               Color(0xFFFFFFFF)),
-
-              //Останавливаем таймер, перемещаем пользователя на экран выбора тренировок и очищаем стэк с экранами прошедших тренировок
-              Button(Size(127, 40), "Завершить", () => 
-                GetDialog(context, "Завершение тренировки", "Вы точно хотите завершить тренировку?", () {
-                  _timer.cancel();
-                  Navigator.pushAndRemoveUntil(
-                    context, 
-                    MaterialPageRoute(builder: (context) => TrainChooseScreen()),
-                    (route) => false
-                  );
-                }),
-              Color(0xFFEADDFF)),
-            ],
-          ),
-        ],
-      ))
+                Color(0xFFEADDFF)),
+              ],
+            ),
+          ],
+        ))
+      ),
     );
   }
 
