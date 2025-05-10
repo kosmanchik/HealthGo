@@ -1,31 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:health_go/screens/goal_screen.dart';
-import 'package:health_go/screens/login_screen.dart';
-import 'package:health_go/supportive_widgets/button.dart';
+import 'package:health_go/firebase/firebase_auth.dart';
+import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/input_textbox.dart';
 import 'package:health_go/supportive_widgets/registration_text.dart';
-import 'package:health_go/firebase/firebase_auth.dart';
 
-class RegistrationScreen extends StatefulWidget{
-  const RegistrationScreen({super.key});
-
+class LoginScreen extends StatefulWidget{
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _LoginScreenState extends State<LoginScreen> {
+
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
   
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -51,7 +44,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               offset: Offset(0, 8),
             )]
           ),        
-        height: 510,
+        height: 300,
         width: 306,
         margin: EdgeInsets.only(top: 86, left: 48),
         child: Column(
@@ -64,54 +57,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 color: Color(0xFFFFFFFF),
               ),
               margin: const EdgeInsets.only(top: 14),
-              child: Center(child: Text("Регистрация", style: TextStyle(
+              child: Center(child: Text("Вход", style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 24,
                 ))
               ),
             ),
-
             SizedBox(height: 11),
-
             RegistrationText("Введите свои данные", 187, 30),
-
-            InputTextBox("Ваше имя", 220, 40, _usernameController),
-            SizedBox(height: 20),
-            InputTextBox("Ваш возраст", 220, 40, _ageController),
-            SizedBox(height: 35),
-
-            RegistrationText("Введите электронную почту", 251, 30),
 
             InputTextBox("Ivan@gmail.com", 262, 40, _emailController),
             SizedBox(height: 20),
             InputTextBox("Пароль", 262, 40, _passwordController),
 
-            SizedBox(height: 79),
-
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () => 
-                    Navigator.pushReplacement(
-                      context, 
-                      MaterialPageRoute(builder: (context) => LoginScreen())
-                    ), 
-                  child: Text("Уже есть аккаунт?")
-                ),
-                Container( 
-                  margin: EdgeInsets.only(left: 20),
+            SizedBox(height: 30),
+            Container( 
+                  margin: EdgeInsets.only(left: 150),
                   child:
                     ElevatedButton(
                       onPressed: () => showDialog(
                         context: context, 
                         builder: (context) => AlertDialog(
-                          title: Text("Сохранить данные?"),
+                          title: Text("Войти?"),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
                               child: Text("Нет")),
                             TextButton(
-                              onPressed: SignUp,
+                              onPressed: SignIn,
                               child: Text("Да")
                             ),
                           ]
@@ -128,30 +101,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: Text("Продолжить")
                     ),
                 ),
-                
-              ]
-            )
-          ],
-        ),
-      ),
+          ]
+        )
+      )
     );
   }
 
-  void SignUp() async {
+  void SignIn() async{
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    User? user = await _auth.SignUpWithEmailPassword(email, password);
+    User? user = await _auth.SignInWithEmailPassword(email, password);
 
     if (user != null) {
       Navigator.pushAndRemoveUntil(
         context, 
-        MaterialPageRoute(builder: (context) => GoalScreen()), 
+        MaterialPageRoute(builder: (context) => TrainChooseScreen()), 
         (route) => false
       );
-    }
-    else {
-      print("Ошибка авторизации в registration_screen");
     }
   }
 }

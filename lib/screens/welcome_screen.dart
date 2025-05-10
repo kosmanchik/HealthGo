@@ -21,7 +21,7 @@ class WelcomeScreen extends StatelessWidget{
         children: [
           ImageSection("assets/images/running_girl.png"),
 
-          ButtonIcon(Icon(Icons.account_circle_outlined), Size(195.0, 45.0), "Регистрация", () {
+          ButtonIcon(Icon(Icons.account_circle_outlined), Size(195.0, 45.0), "Регистрация / Вход", () {
             Navigator.push(
               context, 
               MaterialPageRoute(builder: (contex) => RegistrationScreen()));
