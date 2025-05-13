@@ -96,8 +96,21 @@ class StartTrainScreen extends StatelessWidget{
         context, 
         MaterialPageRoute(builder: (context) => screen));
     }
-    Navigator.pushReplacement(
-      context, 
-      MaterialPageRoute(builder: (context) => TrainChooseScreen()));
+    
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: Text("Поздравляем"),
+        content: Text("Вы завершили тренировку!"),
+        actions: [
+          TextButton(
+            onPressed: () =>  Navigator.pushReplacement(
+              context, 
+              MaterialPageRoute(builder: (context) => TrainChooseScreen())
+            ), 
+            child: Text("Перейти к выбору тренировки"))
+        ],
+      )
+    );
   }
 }
