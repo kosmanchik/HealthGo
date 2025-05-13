@@ -6,8 +6,11 @@ class ButtonIcon extends StatelessWidget
   final VoidCallback _onPressed; //функция, вызывающиеся на нажатие кнопки
   final Icon? _icon; //иконка для отображения на кнопке
   final Size _buttonSize;
+  Color _buttonColor = Color(0xFFECE6F0);
+  Color _buttonFontColor = Color(0xFF65558F);
 
-  const ButtonIcon(this._icon, this._buttonSize, this._buttonText, this._onPressed, {super.key});
+  ButtonIcon.withStandardColor(this._icon, this._buttonSize, this._buttonText, this._onPressed, {super.key});
+  ButtonIcon(this._icon, this._buttonSize, this._buttonText, this._onPressed, this._buttonColor, this._buttonFontColor,{super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +32,8 @@ class ButtonIcon extends StatelessWidget
 
   ButtonStyle GetStandartStyle() {
     return ElevatedButton.styleFrom(
-      backgroundColor: Color(0xFFECE6F0),
-      foregroundColor: Color(0xFF65558F),
+      backgroundColor: _buttonColor,
+      foregroundColor: _buttonFontColor,
       minimumSize: _buttonSize,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
