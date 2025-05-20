@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "955538797625",
+    "project_id": "gotrainfirebase",
+    "storage_bucket": "gotrainfirebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955538797625:android:2786e0d94902ab42ce49e8",
+        "android_client_info": {
+          "package_name": "com.example.health_go"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwvdXPWW3D15qGZ0oDdoYm6UlkHRxqFac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
