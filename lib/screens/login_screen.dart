@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_go/firebase/firebase_auth.dart';
+import 'package:health_go/screens/main_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/input_textbox.dart';
 import 'package:health_go/supportive_widgets/registration_text.dart';
+import 'package:health_go/user/preferences.dart';
 
 class LoginScreen extends StatefulWidget{
   @override
@@ -27,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: Center(child: Container(
         decoration: BoxDecoration(
           color: Color(0xFFDED8E0),
           boxShadow: [ 
@@ -46,7 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),        
         height: 300,
         width: 306,
-        margin: EdgeInsets.only(top: 86, left: 48),
         child: Column(
           children: [
             Container(
@@ -66,9 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 11),
             RegistrationText("Введите свои данные", 187, 30),
 
-            InputTextBox("Ivan@gmail.com", 262, 40, _emailController),
+            InputTextBox("Ivan@gmail.com", 262, 40, _emailController, false),
             SizedBox(height: 20),
-            InputTextBox("Пароль", 262, 40, _passwordController),
+            InputTextBox("Пароль", 262, 40, _passwordController, true),
 
             SizedBox(height: 30),
             Container( 
@@ -104,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ]
         )
       )
-    );
+    ));
   }
 
   void SignIn() async{
@@ -116,9 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user != null) {
       Navigator.pushAndRemoveUntil(
         context, 
-        MaterialPageRoute(builder: (context) => TrainChooseScreen()), 
+        MaterialPageRoute(builder: (context) => MainScreen()), 
         (route) => false
       );
     }
+    UserPreferences.SetFirebaseRegistrated(true);
   }
 }

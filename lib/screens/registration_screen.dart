@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:health_go/firebase/firestore_service.dart';
 import 'package:health_go/screens/goal_screen.dart';
 import 'package:health_go/screens/login_screen.dart';
-import 'package:health_go/supportive_widgets/button.dart';
 import 'package:health_go/supportive_widgets/input_textbox.dart';
 import 'package:health_go/supportive_widgets/registration_text.dart';
 import 'package:health_go/firebase/firebase_auth.dart';
+import 'package:health_go/user/preferences.dart';
 
 class RegistrationScreen extends StatefulWidget{
   const RegistrationScreen({super.key});
@@ -28,13 +29,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: Center(child: Container(
         decoration: BoxDecoration(
           color: Color(0xFFDED8E0),
           boxShadow: [ 
@@ -53,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),        
         height: 510,
         width: 306,
-        margin: EdgeInsets.only(top: 86, left: 48),
+       
         child: Column(
           children: [
             Container(
@@ -75,16 +77,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
             RegistrationText("Введите свои данные", 187, 30),
 
-            InputTextBox("Ваше имя", 220, 40, _usernameController),
+            InputTextBox("Ваше имя", 220, 40, _usernameController, false),
             SizedBox(height: 20),
-            InputTextBox("Ваш возраст", 220, 40, _ageController),
+            InputTextBox("Ваш возраст", 220, 40, _ageController, false),
             SizedBox(height: 35),
 
             RegistrationText("Введите электронную почту", 251, 30),
 
-            InputTextBox("Ivan@gmail.com", 262, 40, _emailController),
+            InputTextBox("Ivan@gmail.com", 262, 40, _emailController, false),
             SizedBox(height: 20),
-            InputTextBox("Пароль", 262, 40, _passwordController),
+            InputTextBox("Пароль", 262, 40, _passwordController, true),
 
             SizedBox(height: 79),
 
@@ -92,7 +94,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               children: [
                 TextButton(
                   onPressed: () => 
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context, 
                       MaterialPageRoute(builder: (context) => LoginScreen())
                     ), 
@@ -134,21 +136,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   void SignUp() async {
     String email = _emailController.text;
     String password = _passwordController.text;
+    String name = _usernameController.text;
+    String age = _ageController.text;
 
     User? user = await _auth.SignUpWithEmailPassword(email, password);
 
-    if (user != null) {
+    if (user != null && name != "" && age != "") {
+      FirestoreService.SetBasicUserInfo(name, age);
       Navigator.pushAndRemoveUntil(
         context, 
         MaterialPageRoute(builder: (context) => GoalScreen()), 
         (route) => false
       );
+      UserPreferences.SetFirebaseRegistrated(true);
     }
     else {
       print("Ошибка авторизации в registration_screen");

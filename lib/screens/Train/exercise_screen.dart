@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:health_go/screens/main_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
 import 'package:health_go/supportive_widgets/button.dart';
 import 'package:health_go/supportive_widgets/time_container.dart';
 import 'dart:async';
+
+import 'package:health_go/user/preferences.dart';
 
 class ExerciseScreen extends StatefulWidget{
   
@@ -116,9 +119,20 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 Button(Size(127, 40), "Завершить", () => 
                   GetDialog(context, "Завершение тренировки", "Вы точно хотите завершить тренировку?", () {
                     _timer.cancel();
+                    
+                    var ifFirebaseRegistred = UserPreferences.GetFirebaseRegistrated() ?? false;
+                    if (!ifFirebaseRegistred) {
+                      Navigator.pushAndRemoveUntil(
+                        context, 
+                        MaterialPageRoute(builder: (context) => TrainChooseScreen()),
+                        (route) => false
+                      );
+                      return;
+                    }
+
                     Navigator.pushAndRemoveUntil(
                       context, 
-                      MaterialPageRoute(builder: (context) => TrainChooseScreen()),
+                      MaterialPageRoute(builder: (context) => MainScreen()),
                       (route) => false
                     );
                   }),

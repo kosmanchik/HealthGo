@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_go/screens/goal_screen.dart';
+import 'package:health_go/screens/main_screen.dart';
 import 'package:health_go/screens/registration_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';

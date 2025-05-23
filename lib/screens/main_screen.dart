@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_go/firebase/firestore_service.dart';
 import 'package:health_go/screens/train_choice.dart';
+import 'package:health_go/user/preferences.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -8,6 +10,32 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   int _dayStreak = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    UpdateDayStreak();
+  }
+
+  void UpdateDayStreak() async {
+    var isFirebaseRegistred = UserPreferences.GetFirebaseRegistrated() ?? false;
+    if (!isFirebaseRegistred) return;
+
+    var userData = await FirestoreService.GetUserData();
+    var date = DateTime.now();
+
+    if (date.difference(DateTime.parse(userData['last-streak-update'])).inDays > 1) {
+      FirestoreService.ResetDayStreak();
+        setState(() {
+        _dayStreak = 0;
+      });
+      return;
+    }
+
+    setState(() {
+      _dayStreak = userData['day-streak'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

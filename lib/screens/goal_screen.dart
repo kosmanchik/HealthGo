@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_go/screens/main_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/button.dart';
 import 'package:health_go/supportive_widgets/text_section.dart';
@@ -22,7 +23,7 @@ class GoalScreen extends StatelessWidget {
               UserPreferences.SetGoal("Похудеть"); //запоминаем цель пользователя
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TrainChooseScreen())
+                MaterialPageRoute(builder: (context) => MainScreen())
                 );
               }, Color(0xFFECE6F0)
             ), 
@@ -31,7 +32,7 @@ class GoalScreen extends StatelessWidget {
               UserPreferences.SetGoal("Набрать вес");
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TrainChooseScreen())
+                MaterialPageRoute(builder: (context) => MainScreen())
                 );
               }, Color(0xFFECE6F0)
             ),
@@ -41,7 +42,7 @@ class GoalScreen extends StatelessWidget {
               UserPreferences.SetGoal("Поддержать вес");
               Navigator.pushReplacement( //Замена данного экрана в стэке на следующий
                 context,
-                MaterialPageRoute(builder: (context) => TrainChooseScreen())
+                MaterialPageRoute(builder: (context) => MainScreen())
                 );
               }, Color(0xFFECE6F0)
             ),
