@@ -18,7 +18,7 @@ class StartScreen extends StatelessWidget //виджет стартового э
           ImageSection("assets/images/start_screen_man.png"),         
           ButtonIcon.withStandardColor(Icon(Icons.emoji_emotions_outlined), Size(116.0, 56.0), "СТАРТ", () {
             //функция перехода на страницу регистрации
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => WelcomeScreen())
             );

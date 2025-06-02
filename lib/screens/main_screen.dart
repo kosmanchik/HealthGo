@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:health_go/firebase/firestore_service.dart';
+import 'package:health_go/screens/table_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
+import 'package:health_go/supportive_widgets/button.dart';
+import 'package:health_go/supportive_widgets/button_icon.dart';
 import 'package:health_go/user/preferences.dart';
 
 class MainScreen extends StatefulWidget {
@@ -10,11 +13,15 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   int _dayStreak = 0;
+  String _maxScore = "";
+  String _currentScore = "";
 
   @override
   void initState() {
     super.initState();
     UpdateDayStreak();
+    GetMaxScore();
+    GetCurrentScore();
   }
 
   void UpdateDayStreak() async {
@@ -42,54 +49,140 @@ class MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(backgroundColor: Color(0xFFF3EDF7), automaticallyImplyLeading: false),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Color(0xFFFAE1FA),
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [ 
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.5),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: Offset(0, 4),
-                )]
-            ),
-            width: 240.0,
-            height: 182.0,
-            margin: EdgeInsets.only(left: 16, top: 189),
-            child: Center(
-              child: GetDayStreakData(),
-            ),
+          Row(
+            spacing: 20,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFFAE1FA),
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [ 
+                    BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.5),
+                      spreadRadius: 0,
+                      blurRadius: 4,
+                      offset: Offset(0, 4),
+                    )]
+                ),
+                width: 240.0,
+                height: 182.0,
+                margin: EdgeInsets.only(left: 16, top: 189),
+                child: Center(
+                  child: GetDayStreakData(),
+                ),
+              ),
+
+              Container(
+                margin: EdgeInsets.only(top: 189),
+                child: RichText(
+                  text: TextSpan(
+                    text: "Ваш рекорд\n",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: "$_maxScore очков",
+                        style: const TextStyle(fontWeight: FontWeight.w400),
+                      )
+                    ]
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              
+            ],
           ),
+          
+          SizedBox(height: 20),
+          
+          Row(
+            spacing: 20,
+            children: [
+              InkWell( 
+                child: Container(
+                  height: 131,
+                  width: 240,
+                  margin: EdgeInsets.only(left: 16),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: AssetImage("assets/images/gym.jpg"), fit: BoxFit.fill),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: Center(child: Text(
+                    "Начать\nтренировку",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24,
+                    ),
+                    textAlign: TextAlign.center,
+                  )),
+                ),
+                onTap: () => Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => TrainChooseScreen())
+                ),
+              ),
+
+              RichText(
+                text: TextSpan(
+                  text: "Сейчас у вас\n",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: "$_currentScore очков",
+                      style: const TextStyle(fontWeight: FontWeight.w400),
+                    )
+                  ]
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          
 
           SizedBox(height: 20),
 
-          InkWell( 
-            child: Container(
-              height: 131,
-              width: 233,
-              margin: EdgeInsets.only(left: 16),
-              decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage("assets/images/gym.jpg"), fit: BoxFit.fill),
-                borderRadius: BorderRadius.circular(28),
+          Container(
+            height: 100,
+            width: 380,
+            margin: EdgeInsets.only(left: 16),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFEADDFF),
+                foregroundColor: Color(0xFF65558F),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                )
               ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RatingTable())
+              ), 
               child: Center(child: Text(
-                "Начать\nтренировку",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                ),
-                textAlign: TextAlign.center,
-              )),
-            ),
-            onTap: () => Navigator.push(
-              context, 
-              MaterialPageRoute(builder: (context) => TrainChooseScreen())
-            ),
-          )
+                  "Таблица Рейтинга",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                  ),
+                  textAlign: TextAlign.center,
+                )
+              ),
+            )
+          ),
+          SizedBox(height: 20),          
         ],
       ),
     );
@@ -157,4 +250,8 @@ class MainScreenState extends State<MainScreen> {
       ],
     );
   }
+  
+  void GetMaxScore() async => _maxScore = await FirestoreService.GetUserMaxScore();
+  
+  void GetCurrentScore() async => _currentScore = await FirestoreService.GetUserScore();
 }

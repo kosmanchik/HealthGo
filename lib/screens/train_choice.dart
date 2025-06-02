@@ -23,7 +23,7 @@ class TrainChooseScreen extends StatelessWidget {
             Button(Size(353.0, 40.0), "Готовый план тренировок", () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StartTrainScreen(Trains.classicTrain.key))
+                MaterialPageRoute(builder: (context) => StartTrainScreen(Trains.classicTrain))
               );
             }, Color(0xFFECE6F0)),
             Button(Size(353.0, 40.0), "Создание индивидуального плана", () {}, Color(0xFFECE6F0)),

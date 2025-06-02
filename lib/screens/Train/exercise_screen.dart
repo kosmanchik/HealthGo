@@ -120,8 +120,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   GetDialog(context, "Завершение тренировки", "Вы точно хотите завершить тренировку?", () {
                     _timer.cancel();
                     
-                    var ifFirebaseRegistred = UserPreferences.GetFirebaseRegistrated() ?? false;
-                    if (!ifFirebaseRegistred) {
+                    var isFirebaseRegistred = UserPreferences.GetFirebaseRegistrated() ?? false;
+                    if (!isFirebaseRegistred) {
                       Navigator.pushAndRemoveUntil(
                         context, 
                         MaterialPageRoute(builder: (context) => TrainChooseScreen()),
@@ -129,7 +129,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       );
                       return;
                     }
-
                     Navigator.pushAndRemoveUntil(
                       context, 
                       MaterialPageRoute(builder: (context) => MainScreen()),

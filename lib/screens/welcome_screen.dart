@@ -9,7 +9,7 @@ import '../user/preferences.dart';
 
 // ignore: must_be_immutable
 class WelcomeScreen extends StatelessWidget{
-  final bool _isRegitrated = UserPreferences.GetIfRegistrated() ?? false; //либо мы знаем что пользователь зарегистрирован и сохраняли это => true, либо нет => false
+  final bool _isGoalSet = UserPreferences.GetIsGoalSet() ?? false; //либо мы знаем что пользователь зарегистрирован и сохраняли это => true, либо нет => false
 
   WelcomeScreen({super.key});
 
@@ -32,9 +32,10 @@ class WelcomeScreen extends StatelessWidget{
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) {
-                if (!_isRegitrated) {
+                if (!_isGoalSet) {
                   return GoalScreen();
                 }
+                UserPreferences.SetFirebaseRegistrated(false);
                 return TrainChooseScreen();
                 }
               ), 

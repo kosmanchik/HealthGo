@@ -9,7 +9,7 @@ class UserPreferences { //простые данные о пользовател�
   static Future init() async => _preferences = await SharedPreferences.getInstance();
 
   static Future SetIfRegistrated(bool ifRegistrated) async => await _preferences?.setBool(_registratedKey, ifRegistrated);
-  static bool? GetIfRegistrated() =>  _preferences?.getBool(_registratedKey);
+  static bool? GetIsGoalSet() =>  _preferences?.getBool(_registratedKey);
 
   static Future SetFirebaseRegistrated(bool registred) async => await _preferences?.setBool(_registratedFirebaseKey, registred);
   static bool? GetFirebaseRegistrated() => _preferences?.getBool(_registratedFirebaseKey);

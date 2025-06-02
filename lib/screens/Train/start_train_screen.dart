@@ -118,7 +118,9 @@ class StartTrainScreen extends StatelessWidget{
     if (date.difference(DateTime.parse(userData['last-streak-update'])).inDays == 1 
       || userData['day-streak'] == 0) {
       FirestoreService.UpdateDayStreak();
-    }    
+    }
+
+    FirestoreService.UpdateScore();
     
     showDialog(
       context: context, 
