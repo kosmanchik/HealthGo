@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:health_go/firebase/achievements_service.dart';
 import 'package:health_go/screens/table_screen.dart';
 import 'package:health_go/user/user.dart';
 
@@ -7,7 +8,8 @@ class FirestoreService {
   static String _userId = "";
   static int _scoreUpdate = 10;
 
-  Future SetUserId(String userId) async  => _userId = userId; 
+  static Future SetUserId(String userId) async  => _userId = userId; 
+  static String GetUserId() => _userId; 
 
   static Future SetBasicUserInfo(String name, String age) async {
     name.trim();
@@ -25,19 +27,19 @@ class FirestoreService {
       });
   }
 
-  static Future UpdateScore() async {
+  static Future UpdateScore(int scoreToAdd) async {
     var userData = await GetUserData();
     await _firestore.collection('users')
       .doc(_userId)
       .update({
-        'score': userData['score'] + _scoreUpdate
+        'score': userData['score'] + scoreToAdd
       });
 
-    if (userData['score'] + _scoreUpdate > userData['max-score']) {
+    if (userData['score'] + scoreToAdd > userData['max-score']) {
       await _firestore.collection('users')
         .doc(_userId)
         .update( {
-          'max-score': userData['score'] + _scoreUpdate,
+          'max-score': userData['score'] + scoreToAdd,
         });
     }
   }
@@ -48,6 +50,11 @@ class FirestoreService {
       .doc(_userId)
       .update({
         'day-streak': userData['day-streak'] + 1
+      });
+    await _firestore.collection('users')
+      .doc(_userId)
+      .update({
+        'last-streak-update': DateTime.now().toString()
       });
   }
 

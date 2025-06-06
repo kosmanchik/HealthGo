@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_go/firebase/achievements_service.dart';
 import 'package:health_go/firebase/firestore_service.dart';
 import 'package:health_go/screens/Train/exercise_screen.dart';
 import 'package:health_go/screens/main_screen.dart';
@@ -120,22 +121,43 @@ class StartTrainScreen extends StatelessWidget{
       FirestoreService.UpdateDayStreak();
     }
 
-    FirestoreService.UpdateScore();
+    FirestoreService.UpdateScore(10);
     
-    showDialog(
-      context: context, 
-      builder: (context) => AlertDialog(
-        title: Text("Поздравляем"),
-        content: Text("Вы завершили тренировку!"),
-        actions: [
-          TextButton(
-            onPressed: () =>  Navigator.pushReplacement(
-              context, 
-              MaterialPageRoute(builder: (context) => MainScreen())
-            ), 
-            child: Text("Перейти на начальный экран"))
-        ],
-      )
-    );
+    var isAchievementCollected = await AchievementsService.CheckAchievements(FirestoreService.GetUserId(), userData['score'], userData['day-streak']);
+    
+    if (isAchievementCollected) {
+      showDialog(
+        context: context, 
+        builder: (context) => AlertDialog(
+          title: Text("Поздравляем!"),
+          content: Text("Вы получили новое достижение!\nМожете увидеть его в вкладке \"Достижения\""),
+          actions: [
+            TextButton(
+              onPressed: () =>  Navigator.pushReplacement(
+                context, 
+                MaterialPageRoute(builder: (context) => MainScreen())
+              ), 
+              child: Text("Перейти на главный экран"))
+          ],
+        )
+      );
+    }
+    else {
+      showDialog(
+        context: context, 
+        builder: (context) => AlertDialog(
+          title: Text("Так держать"),
+          content: Text("Вы завершили тренировку!"),
+          actions: [
+            TextButton(
+              onPressed: () =>  Navigator.pushReplacement(
+                context, 
+                MaterialPageRoute(builder: (context) => MainScreen())
+              ), 
+              child: Text("Перейти на главный экран"))
+          ],
+        )
+      );
+    }
   }
 }

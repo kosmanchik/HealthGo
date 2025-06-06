@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_go/firebase/firestore_service.dart';
+import 'package:health_go/screens/achievements_screen.dart';
 import 'package:health_go/screens/table_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/button.dart';
@@ -15,13 +16,15 @@ class MainScreenState extends State<MainScreen> {
   int _dayStreak = 0;
   String _maxScore = "";
   String _currentScore = "";
+  String _userName = "";
 
   @override
   void initState() {
-    super.initState();
     UpdateDayStreak();
-    GetMaxScore();
-    GetCurrentScore();
+    SetMaxScore();
+    SetCurrentScore();
+    SetUserName();
+    super.initState();
   }
 
   void UpdateDayStreak() async {
@@ -31,9 +34,10 @@ class MainScreenState extends State<MainScreen> {
     var userData = await FirestoreService.GetUserData();
     var date = DateTime.now();
 
-    if (date.difference(DateTime.parse(userData['last-streak-update'])).inDays > 1) {
+    if (date.difference(DateTime.parse(userData['last-streak-update'])).inDays > 1
+      && date.difference(DateTime.parse(userData['last-streak-update'])).inDays != 0) {
       FirestoreService.ResetDayStreak();
-        setState(() {
+      setState(() {
         _dayStreak = 0;
       });
       return;
@@ -44,13 +48,44 @@ class MainScreenState extends State<MainScreen> {
     });
   }
 
+  void SetMaxScore() async => _maxScore = await FirestoreService.GetUserMaxScore();
+  
+  void SetCurrentScore() async => _currentScore = await FirestoreService.GetUserScore();
+
+  void SetUserName() async {
+    var userData = await FirestoreService.GetUserData();
+    _userName = userData['name'] ?? "";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: Color(0xFFF3EDF7), automaticallyImplyLeading: false),
       body: Column(
+        spacing: 20.0,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          
+          SizedBox(height: 20),
+
+          Center(child: RichText(
+            text: TextSpan(
+              text: "Здравствуйте,\n",
+              style: TextStyle(
+                fontFamily: "Inter",
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+                fontSize: 20,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: "$_userName!",
+                  style: const TextStyle(fontWeight: FontWeight.w400),
+                )
+              ]
+            ),
+            textAlign: TextAlign.center,
+          )),
           Row(
             spacing: 20,
             children: [
@@ -68,14 +103,13 @@ class MainScreenState extends State<MainScreen> {
                 ),
                 width: 240.0,
                 height: 182.0,
-                margin: EdgeInsets.only(left: 16, top: 189),
+                margin: EdgeInsets.only(left: 16),
                 child: Center(
                   child: GetDayStreakData(),
                 ),
               ),
 
               Container(
-                margin: EdgeInsets.only(top: 189),
                 child: RichText(
                   text: TextSpan(
                     text: "Ваш рекорд\n",
@@ -98,8 +132,6 @@ class MainScreenState extends State<MainScreen> {
               
             ],
           ),
-          
-          SizedBox(height: 20),
           
           Row(
             spacing: 20,
@@ -150,9 +182,6 @@ class MainScreenState extends State<MainScreen> {
               ),
             ],
           ),
-          
-
-          SizedBox(height: 20),
 
           Container(
             height: 100,
@@ -182,7 +211,35 @@ class MainScreenState extends State<MainScreen> {
               ),
             )
           ),
-          SizedBox(height: 20),          
+
+          Container(
+            height: 100,
+            width: 380,
+            margin: EdgeInsets.only(left: 16),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFEADDFF),
+                foregroundColor: Color(0xFF65558F),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                )
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AchievementsScreen())
+              ), 
+              child: Center(child: Text(
+                  "Достижения",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                  ),
+                  textAlign: TextAlign.center,
+                )
+              ),
+            )
+          ),
         ],
       ),
     );
@@ -250,8 +307,4 @@ class MainScreenState extends State<MainScreen> {
       ],
     );
   }
-  
-  void GetMaxScore() async => _maxScore = await FirestoreService.GetUserMaxScore();
-  
-  void GetCurrentScore() async => _currentScore = await FirestoreService.GetUserScore();
 }

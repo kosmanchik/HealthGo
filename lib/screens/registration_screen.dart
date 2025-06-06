@@ -6,7 +6,7 @@ import 'package:health_go/screens/goal_screen.dart';
 import 'package:health_go/screens/login_screen.dart';
 import 'package:health_go/supportive_widgets/input_textbox.dart';
 import 'package:health_go/supportive_widgets/registration_text.dart';
-import 'package:health_go/firebase/firebase_auth.dart';
+import 'package:health_go/firebase/firebase_auth_service.dart';
 import 'package:health_go/user/preferences.dart';
 
 class RegistrationScreen extends StatefulWidget{

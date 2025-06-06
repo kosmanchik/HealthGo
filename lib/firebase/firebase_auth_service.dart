@@ -1,16 +1,19 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_go/firebase/achievements_service.dart';
 import 'package:health_go/firebase/firestore_service.dart';
 
 
 class FirebaseAuthService {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  FirestoreService _firestoreService = FirestoreService();
 
   Future<User?> SignUpWithEmailPassword(String email, String password) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      _firestoreService.SetUserId(credential.user!.uid);
+      FirestoreService.SetUserId(credential.user!.uid);
+      AchievementsService.InitAchievements();
+      AchievementsService.InitUserAchievements();
+
       return credential.user;
     } on FirebaseAuthException catch (e) {
       HandleAuthException(e);
@@ -22,10 +25,24 @@ class FirebaseAuthService {
   Future<User?> SignInWithEmailPassword(String email, String password) async {
     try {
       UserCredential credential = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      _firestoreService.SetUserId(credential.user!.uid);
+      FirestoreService.SetUserId(credential.user!.uid);
+      AchievementsService.InitAchievements();
+      
+      await ChekAchievementsWhenAuth(credential);
+
       return credential.user;
     } on FirebaseAuthException catch(e) {
       HandleAuthException(e);
+    }
+  }
+
+  Future<void> ChekAchievementsWhenAuth(UserCredential credential) async {
+    var userDoc = await FirestoreService.GetUserData();
+    
+    if (userDoc != {}) {
+      final score = userDoc['score'] ?? 0;
+      final dayStreak = userDoc['day-streak'] ?? 0;
+      await AchievementsService.CheckAchievements(credential.user!.uid, score, dayStreak);
     }
   }
 

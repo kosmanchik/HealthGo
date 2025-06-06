@@ -73,10 +73,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       child: Scaffold(
         appBar: AppBar(backgroundColor: Color(0xFFF3EDF7), automaticallyImplyLeading: false),
       
-        body: Center( child: Column (
+        body: Center(child: Column (
           mainAxisAlignment: MainAxisAlignment.center,
       
           children: [
+            
             widget._exerciseImage, //изображение упражнения
       
             SizedBox(height: 16),

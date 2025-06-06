@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:health_go/firebase/firebase_auth.dart';
+import 'package:health_go/firebase/firebase_auth_service.dart';
 import 'package:health_go/screens/main_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/input_textbox.dart';
