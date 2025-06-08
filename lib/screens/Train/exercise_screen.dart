@@ -1,124 +1,222 @@
 import 'package:flutter/material.dart';
-import 'package:health_go/screens/Train/exercise_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
-import 'package:health_go/screens/Train/train.dart';
+import 'package:health_go/supportive_widgets/button.dart';
+import 'package:health_go/supportive_widgets/time_container.dart';
+import 'dart:async';
 
-class StartTrainScreen extends StatelessWidget {
-  final List<Widget> _exercisesList;
+class ExerciseScreen extends StatefulWidget {
+  final ImageSection _exerciseImage;
+  final int _secondsTime;
+  final String instruction; // Инструкция
 
-  const StartTrainScreen(this._exercisesList, {super.key});
+  const ExerciseScreen(
+    this._exerciseImage,
+    this._secondsTime, {
+    required this.instruction,
+    super.key,
+  });
+
+  @override
+  State<ExerciseScreen> createState() => _ExerciseScreenState();
+}
+
+class _ExerciseScreenState extends State<ExerciseScreen> {
+  late int _remainingSeconds;
+  Timer? _timer;
+  bool _isPaused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _remainingSeconds = widget._secondsTime;
+    _startTimer();
+  }
+
+  void _destroy() {
+    _timer?.cancel();
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+
+  void _startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      if (!_isPaused) {
+        if (_remainingSeconds == 0) {
+          _destroy();
+        } else {
+          setState(() {
+            _remainingSeconds--;
+          });
+        }
+      }
+    });
+  }
+
+  void _pauseTimer() {
+    setState(() {
+      _isPaused = true;
+    });
+  }
+
+  void _resumeTimer() {
+    setState(() {
+      _isPaused = false;
+    });
+  }
+
+  String _getMinutes(int seconds) => (seconds ~/ 60).toString().padLeft(2, '0');
+  String _getSeconds(int seconds) => (seconds % 60).toString().padLeft(2, '0');
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF3EDF7),
-        automaticallyImplyLeading: false,
-      ),
-      body: Center(
-        child: Container(
-          margin: EdgeInsets.only(top: 97, bottom: 157),
-          width: 312,
-          height: 352,
-          decoration: BoxDecoration(
-            color: Color(0xFFECE6F0),
-            borderRadius: BorderRadius.circular(28),
-          ),
-
-          child: Container(
-            margin: EdgeInsets.only(right: 24, left: 24, top: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 16,
-              children: [
-                Text("Информация о тренировке", style: GetHeaderStyle()),
-                Text(
-                  "В тренировке присутствуют самые базовые упражнения на ноги и ягодицы. Напоминаем так же о том, как важно правильно выполнять упражнения, соблюдать правильное дыхание и следить за своим самочувствием! Желаем удачной тренировки!",
-                  style: GetMainTextStyle(),
-                ),
-
-                Container(
-                  margin: EdgeInsets.only(right: 24, top: 18),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    spacing: 32,
-                    children: [
-                      InkWell(
-                        child: Text("Назад", style: GetClickTextStyle()),
-                        onTap: () {
-                          Navigator.pop(
-                            context,
-                          ); //Снимает данный экран с стэка и возвращается к предыдущему
-                        },
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFFF3EDF7),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              // кнопка инструкции
+              icon: Icon(Icons.info_outline),
+              onPressed: () {
+                _pauseTimer();
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: Text("Инструкция"),
+                        content: Text(widget.instruction),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _resumeTimer();
+                            },
+                            child: Text("Понятно"),
+                          ),
+                        ],
                       ),
-
-                      InkWell(
-                        child: Text("Начать", style: GetClickTextStyle()),
-                        onTap:
-                            () => NavigateTrainScreens(context, _exercisesList),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                );
+              },
             ),
+          ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              widget._exerciseImage,
+              SizedBox(height: 16),
+              Container(
+                height: 105,
+                width: 235,
+                decoration: BoxDecoration(
+                  color: Color(0xFFECE6F0),
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                child: Row(
+                  children: [
+                    TimeContainer(
+                      _getMinutes(_remainingSeconds),
+                      Color(0xFFE7E7E7),
+                      EdgeInsets.only(left: 24, right: 0, bottom: 23, top: 5),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 23),
+                      child: Text(
+                        ":",
+                        style: TextStyle(
+                          fontSize: 57,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    TimeContainer(
+                      _getSeconds(_remainingSeconds),
+                      Color(0xFFE6E0E9),
+                      EdgeInsets.only(right: 24, left: 0, bottom: 23, top: 5),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 23),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Button(
+                    Size(127, 40),
+                    "Пропустить",
+                    () => _showDialog(
+                      context,
+                      "Пропуск упражнения",
+                      "Вы точно хотите пропустить текущее упражнение?",
+                      () {
+                        Navigator.pop(context, 'OK');
+                        _destroy();
+                      },
+                    ),
+                    Color(0xFFFFFFFF),
+                  ),
+                  Button(
+                    Size(127, 40),
+                    "Завершить",
+                    () => _showDialog(
+                      context,
+                      "Завершить тренировку",
+                      "Вы точно хотите завершить тренировку?",
+                      () {
+                        _timer?.cancel();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TrainChooseScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                    ),
+                    Color(0xFFEADDFF),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  TextStyle GetMainTextStyle() {
-    return TextStyle(
-      color: Color(0xFF49454F),
-      fontWeight: FontWeight.w400,
-      fontSize: 14,
-    );
-  }
-
-  TextStyle GetHeaderStyle() {
-    return TextStyle(fontWeight: FontWeight.w400, fontSize: 24);
-  }
-
-  TextStyle GetClickTextStyle() {
-    return TextStyle(
-      color: Color(0xFF65558F),
-      fontWeight: FontWeight.w500,
-      fontSize: 14,
-    );
-  }
-
-  void NavigateTrainScreens(
+  void _showDialog(
     BuildContext context,
-    List<Widget> exercisesScreens,
-  ) async {
-    //перемещение по массиву с упражнениями
-    for (var screen in exercisesScreens) {
-      if (!context.mounted) return;
-      await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => screen),
-      );
-    }
-
+    String title,
+    String message,
+    VoidCallback onOK,
+  ) {
+    _pauseTimer(); //Ставим на паузу при любом диалоге
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text("Поздравляем"),
-            content: Text("Вы завершили тренировку!"),
+            title: Text(title),
+            content: Text(message),
             actions: [
               TextButton(
-                onPressed:
-                    () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TrainChooseScreen(),
-                      ),
-                    ),
-                child: Text("Перейти к выбору тренировки"),
+                onPressed: () {
+                  Navigator.pop(context, "Cancel");
+                  _resumeTimer();
+                },
+                child: Text("Отмена"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, "OK");
+                  onOK();
+                },
+                child: Text("OK"),
               ),
             ],
           ),
