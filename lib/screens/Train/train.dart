@@ -2,13 +2,44 @@ import 'package:flutter/widgets.dart';
 import 'package:health_go/screens/Train/exercise_screen.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
 
-class Trains { //Класс тренировок, добавляем сюда все заготовленные тренировки в виде массива упражнений в нужном порядке
+class Trains {
+  // Класс тренировок, добавляем сюда все заготовленные тренировки в виде массива упражнений в нужном порядке
 
   static final List<Widget> classicTrain = [
-    ExerciseScreen(ImageSection("assets/images/bridge_exercise.png"), 90),
-    ExerciseScreen(ImageSection("assets/images/squats_exercise.png"), 120),
-    ExerciseScreen(ImageSection("assets/images/dumbell_squats_exercise.png"), 60),
-    ExerciseScreen(ImageSection("assets/images/back_exercise.png"), 90),
-    ExerciseScreen(ImageSection("assets/images/lunges_exercise.png"), 90)
+    ExerciseScreen(
+      ImageSection("assets/images/bridge_exercise.png"),
+      90,
+      instruction:
+          "Упражнение для развития больших и средних ягодичных мышц, передней и задней поверхности бедра, пресса.  "
+          "Исходное положение. Встать прямо, слегка согнуть ноги в коленных суставах, стопы поставить на ширину плеч. Спина прямая, руки сложены на груди. "
+          "Техника. Представьте, что за спиной находится скамейка, на которую нужно сесть. Опуститесь до угла в коленных суставах 90°  , не отрывая пяток от пола, и вернитесь в исходное положение, одновременно разгибая коленный сустав и корпус. ",
+    ),
+    ExerciseScreen(
+      ImageSection("assets/images/squats_exercise.png"),
+      120,
+      instruction:
+          "Увеличивается нагрузка на ягодицы и бицепсы бедер, а на квадрицепсы — уменьшается."
+          "Исходное положение.  Ноги шире плеч, носки развернуты в стороны под углом 45°."
+          "Чем ближе ноги друг к другу, тем сильнее задействуются квадрицепсы, чем дальше, тем больше вовлекаются ягодицы и бицепсы бедер. Если нужна нагрузка на ягодичные — ставьте ноги максимально широко"
+          "Техника. Делайте приседание как в классическом варианте, отводя таз назад и держа спину ровной.",
+    ),
+    ExerciseScreen(
+      ImageSection("assets/images/dumbell_squats_exercise.png"),
+      60,
+      instruction:
+          "Выполняйте приседания, держа гантели по бокам тела, спина прямая.",
+    ),
+    ExerciseScreen(
+      ImageSection("assets/images/back_exercise.png"),
+      90,
+      instruction:
+          "Лягте на живот, руки за головой. Поднимайте верхнюю часть тела, напрягая спину.",
+    ),
+    ExerciseScreen(
+      ImageSection("assets/images/lunges_exercise.png"),
+      90,
+      instruction:
+          "Сделайте шаг вперёд и опуститесь в выпад, колено задней ноги почти касается пола.",
+    ),
   ];
 }
