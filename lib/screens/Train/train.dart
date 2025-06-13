@@ -4,7 +4,7 @@ import 'package:health_go/supportive_widgets/image_section.dart';
 import 'package:pair/pair.dart';
 
 class Trains { //Класс тренировок, добавляем сюда все заготовленные тренировки в виде массива упражнений в нужном порядке
-
+ 
   static final List<Widget> classicTrain =  [
     ExerciseScreen(ImageSection("assets/images/bridge_exercise.png"), 90,   
           "Упражнение для развития больших и средних ягодичных мышц, передней и задней поверхности бедра, пресса.  "
@@ -18,4 +18,5 @@ class Trains { //Класс тренировок, добавляем сюда в
     ExerciseScreen(ImageSection("assets/images/dumbell_squats_exercise.png"), 60,  "Выполняйте приседания, держа гантели по бокам тела, спина прямая."),
     ExerciseScreen(ImageSection("assets/images/back_exercise.png"), 90, "Лягте на живот, руки за головой. Поднимайте верхнюю часть тела, напрягая спину."),
     ExerciseScreen(ImageSection("assets/images/lunges_exercise.png"), 90, "Сделайте шаг вперёд и опуститесь в выпад, колено задней ноги почти касается пола.")];
+
 }

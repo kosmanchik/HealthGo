@@ -10,6 +10,7 @@ import 'package:health_go/supportive_widgets/registration_text.dart';
 import 'package:health_go/firebase/firebase_auth_service.dart';
 import 'package:health_go/user/preferences.dart';
 
+
 class RegistrationScreen extends StatefulWidget{
   const RegistrationScreen({super.key});
 
@@ -62,6 +63,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             Container(
               height: 53.h,
               width: 240.w,
+        height: 510,
+        width: 306,
+        margin: EdgeInsets.only(top: 86, left: 48),
+        child: Column(
+          children: [
+            Container(
+              height: 53,
+              width: 240,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: Color(0xFFFFFFFF),
@@ -69,11 +78,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               margin: const EdgeInsets.only(top: 14),
               child: Center(child: Text("Регистрация", style: TextStyle(
                   fontWeight: FontWeight.w600,
+
                   fontSize: 24.sp,
                 ))
               ),
             ),
-
             SizedBox(height: 11.h),
 
             RegistrationText("Введите свои данные", 187.w, 30.h),
@@ -90,11 +99,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             InputTextBox("Пароль", 262.w, 40.h, _passwordController, true),
 
             SizedBox(height: 79.h),
+                  fontSize: 24,
+                ))
+              ),
+            ),
+
+            SizedBox(height: 11),
+
+            RegistrationText("Введите свои данные", 187, 30),
+
+            InputTextBox("Ваше имя", 220, 40, _usernameController),
+            SizedBox(height: 20),
+            InputTextBox("Ваш возраст", 220, 40, _ageController),
+            SizedBox(height: 35),
+
+            RegistrationText("Введите электронную почту", 251, 30),
+
+            InputTextBox("Ivan@gmail.com", 262, 40, _emailController),
+            SizedBox(height: 20),
+            InputTextBox("Пароль", 262, 40, _passwordController),
+
+            SizedBox(height: 79),
 
             Row(
               children: [
                 TextButton(
                   onPressed: () => 
+
                     Navigator.push(
                       context, 
                       MaterialPageRoute(builder: (context) => LoginScreen())

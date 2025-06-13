@@ -16,8 +16,8 @@ class StartScreen extends StatelessWidget //виджет стартового э
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 97,
         children: [
-          ImageSection("assets/images/start_screen_man.png"),         
           ButtonIcon.withStandardColor(Icon(Icons.emoji_emotions_outlined), Size(116.0.w, 56.0.h), "СТАРТ", () {
+
             //функция перехода на страницу регистрации
             Navigator.pushReplacement(
               context,

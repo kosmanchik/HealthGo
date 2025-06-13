@@ -73,7 +73,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       canPop: false, //Переопределение работы кнопки "Назад" в Андроид (стрелочка влево)
       child: Scaffold(
         appBar: AppBar(backgroundColor: Color(0xFFF3EDF7), automaticallyImplyLeading: false),
-      
         body: Center(child: Column (
           mainAxisAlignment: MainAxisAlignment.center,
       
@@ -169,8 +168,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 //Останавливаем таймер, перемещаем пользователя на экран выбора тренировок и очищаем стэк с экранами прошедших тренировок
                 Button(Size(127, 40), "Завершить", () => 
                   GetDialog(context, "Завершение тренировки", "Вы точно хотите завершить тренировку?", () {
-                    _timer.cancel();
-                    
+                    _timer.cancel();                    
                     var isFirebaseRegistred = UserPreferences.GetFirebaseRegistrated() ?? false;
                     if (!isFirebaseRegistred) {
                       Navigator.pushAndRemoveUntil(

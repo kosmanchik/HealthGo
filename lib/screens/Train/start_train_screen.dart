@@ -102,7 +102,6 @@ class StartTrainScreen extends StatelessWidget{
         context, 
         MaterialPageRoute(builder: (context) => screen));
     }
-
     var isFirebaseRegistred = UserPreferences.GetFirebaseRegistrated() ?? false;
     if (!isFirebaseRegistred) {
       Navigator.pushReplacement(
@@ -159,5 +158,6 @@ class StartTrainScreen extends StatelessWidget{
         )
       );
     }
+
   }
 }
