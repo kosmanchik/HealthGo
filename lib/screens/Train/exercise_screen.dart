@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:health_go/screens/main_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
 import 'package:health_go/supportive_widgets/button.dart';
 import 'package:health_go/supportive_widgets/time_container.dart';
 import 'dart:async';
 
+import 'package:health_go/user/preferences.dart';
+
 class ExerciseScreen extends StatefulWidget{
   
   final ImageSection _exerciseImage;
   final int _secondsTime;
+  final String instruction;
 
-  const ExerciseScreen(this._exerciseImage, this._secondsTime, {super.key});
+  const ExerciseScreen(this._exerciseImage, this._secondsTime, this. instruction, {super.key});
 
   @override
   State<ExerciseScreen> createState() => _ExerciseScreenState();
@@ -69,11 +73,60 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       canPop: false, //Переопределение работы кнопки "Назад" в Андроид (стрелочка влево)
       child: Scaffold(
         appBar: AppBar(backgroundColor: Color(0xFFF3EDF7), automaticallyImplyLeading: false),
-      
-        body: Center( child: Column (
+        body: Center(child: Column (
           mainAxisAlignment: MainAxisAlignment.center,
       
           children: [
+            // кнопка инструкции
+            ElevatedButton(
+                onPressed: () {
+                _timer.cancel();
+                showDialog(
+                  context: context,
+                  builder:
+                    (context) => AlertDialog(
+                      title: Text("Инструкция"),
+                      content: Text(widget.instruction),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            StartTimer();
+                          },
+                          child: Text("Понятно"),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFECE6F0),
+                  minimumSize: Size(356, 74),
+                  foregroundColor: Color(0xFF1D1B20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28),
+                  )
+                ), 
+                child: SizedBox(
+                  height: 32,
+                  width: 308,
+                  child: Row( 
+                    spacing: 155,
+                    children: [
+                      Text("Инструкция", 
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                        ),  
+                      ),
+                      Icon(Icons.expand_more),
+                    ],
+                  )
+                ),
+              ),
+
+            SizedBox(height: 40),
             widget._exerciseImage, //изображение упражнения
       
             SizedBox(height: 16),
@@ -115,10 +168,19 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 //Останавливаем таймер, перемещаем пользователя на экран выбора тренировок и очищаем стэк с экранами прошедших тренировок
                 Button(Size(127, 40), "Завершить", () => 
                   GetDialog(context, "Завершение тренировки", "Вы точно хотите завершить тренировку?", () {
-                    _timer.cancel();
+                    _timer.cancel();                    
+                    var isFirebaseRegistred = UserPreferences.GetFirebaseRegistrated() ?? false;
+                    if (!isFirebaseRegistred) {
+                      Navigator.pushAndRemoveUntil(
+                        context, 
+                        MaterialPageRoute(builder: (context) => TrainChooseScreen()),
+                        (route) => false
+                      );
+                      return;
+                    }
                     Navigator.pushAndRemoveUntil(
                       context, 
-                      MaterialPageRoute(builder: (context) => TrainChooseScreen()),
+                      MaterialPageRoute(builder: (context) => MainScreen()),
                       (route) => false
                     );
                   }),
