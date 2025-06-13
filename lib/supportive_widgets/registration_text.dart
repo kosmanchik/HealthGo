@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegistrationText extends StatelessWidget {
   final double _width;
@@ -14,7 +15,7 @@ class RegistrationText extends StatelessWidget {
       width: _width,
       child: Text(
         _text, 
-        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: Color(0xFF000000)), 
+        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16.sp, color: Color(0xFF000000)), 
         textAlign: TextAlign.center
       ),
     );
