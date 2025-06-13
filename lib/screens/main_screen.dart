@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:health_go/firebase/firestore_service.dart';
 import 'package:health_go/screens/achievements_screen.dart';
 import 'package:health_go/screens/table_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
-import 'package:health_go/supportive_widgets/button.dart';
-import 'package:health_go/supportive_widgets/button_icon.dart';
 import 'package:health_go/user/preferences.dart';
 
 class MainScreen extends StatefulWidget {
@@ -20,11 +19,11 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
+    super.initState();
     UpdateDayStreak();
     SetMaxScore();
     SetCurrentScore();
     SetUserName();
-    super.initState();
   }
 
   void UpdateDayStreak() async {
@@ -33,9 +32,10 @@ class MainScreenState extends State<MainScreen> {
 
     var userData = await FirestoreService.GetUserData();
     var date = DateTime.now();
+    var lastStreakDate = DateTime.parse(userData['last-streak-update']);
+    var difference = DateTime(date.year, date.month, date.day).difference(DateTime(lastStreakDate.year, lastStreakDate.month, lastStreakDate.day)).inDays.abs();
 
-    if (date.difference(DateTime.parse(userData['last-streak-update'])).inDays > 1
-      && date.difference(DateTime.parse(userData['last-streak-update'])).inDays != 0) {
+    if ((difference > 1) && difference != 0) {
       FirestoreService.ResetDayStreak();
       setState(() {
         _dayStreak = 0;
@@ -66,7 +66,7 @@ class MainScreenState extends State<MainScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           
-          SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           Center(child: RichText(
             text: TextSpan(
@@ -75,7 +75,7 @@ class MainScreenState extends State<MainScreen> {
                 fontFamily: "Inter",
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 20.sp,
               ),
               children: <TextSpan>[
                 TextSpan(
@@ -87,7 +87,7 @@ class MainScreenState extends State<MainScreen> {
             textAlign: TextAlign.center,
           )),
           Row(
-            spacing: 20,
+            spacing: 20.w,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -101,9 +101,9 @@ class MainScreenState extends State<MainScreen> {
                       offset: Offset(0, 4),
                     )]
                 ),
-                width: 240.0,
-                height: 182.0,
-                margin: EdgeInsets.only(left: 16),
+                width: 240.0.w,
+                height: 182.0.h,
+                margin: EdgeInsets.only(left: 16.w),
                 child: Center(
                   child: GetDayStreakData(),
                 ),
@@ -117,7 +117,7 @@ class MainScreenState extends State<MainScreen> {
                       fontFamily: "Inter",
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 20.sp,
                     ),
                     children: <TextSpan>[
                       TextSpan(
@@ -134,13 +134,13 @@ class MainScreenState extends State<MainScreen> {
           ),
           
           Row(
-            spacing: 20,
+            spacing: 20.w,
             children: [
               InkWell( 
                 child: Container(
-                  height: 131,
-                  width: 240,
-                  margin: EdgeInsets.only(left: 16),
+                  height: 131.h,
+                  width: 240.w,
+                  margin: EdgeInsets.only(left: 16.w),
                   decoration: BoxDecoration(
                     image: DecorationImage(image: AssetImage("assets/images/gym.jpg"), fit: BoxFit.fill),
                     borderRadius: BorderRadius.circular(28),
@@ -151,7 +151,7 @@ class MainScreenState extends State<MainScreen> {
                       color: Colors.white,
                       fontFamily: "Inter",
                       fontWeight: FontWeight.w600,
-                      fontSize: 24,
+                      fontSize: 24.sp,
                     ),
                     textAlign: TextAlign.center,
                   )),
@@ -169,7 +169,7 @@ class MainScreenState extends State<MainScreen> {
                     fontFamily: "Inter",
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                   ),
                   children: <TextSpan>[
                     TextSpan(
@@ -184,9 +184,9 @@ class MainScreenState extends State<MainScreen> {
           ),
 
           Container(
-            height: 100,
-            width: 380,
-            margin: EdgeInsets.only(left: 16),
+            height: 100.h,
+            width: 380.w,
+            margin: EdgeInsets.only(left: 16.w),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFEADDFF),
@@ -213,9 +213,9 @@ class MainScreenState extends State<MainScreen> {
           ),
 
           Container(
-            height: 100,
-            width: 380,
-            margin: EdgeInsets.only(left: 16),
+            height: 100.h,
+            width: 380.w,
+            margin: EdgeInsets.only(left: 16.w),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFEADDFF),

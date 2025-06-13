@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
 
 class AchievementWidget extends StatelessWidget {
@@ -11,7 +12,7 @@ class AchievementWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      spacing: 30,
+      spacing: 30.w,
       children: [
         _imageSection,
 
@@ -23,7 +24,7 @@ class AchievementWidget extends StatelessWidget {
               fontFamily: "Inter",
               fontWeight: FontWeight.w600,
               color: Colors.black,
-              fontSize: 18,
+              fontSize: 18.sp,
             ),
             children: <TextSpan>[
               TextSpan(

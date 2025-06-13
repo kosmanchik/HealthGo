@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_go/screens/goal_screen.dart';
-import 'package:health_go/screens/main_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:health_go/screens/registration_screen.dart';
 import 'package:health_go/screens/train_choice.dart';
 import 'package:health_go/supportive_widgets/image_section.dart';
@@ -22,13 +22,13 @@ class WelcomeScreen extends StatelessWidget{
         children: [
           ImageSection("assets/images/running_girl.png"),
 
-          ButtonIcon(Icon(Icons.account_circle_outlined), Size(195.0, 45.0), "Регистрация / Вход", () {
+          ButtonIcon(Icon(Icons.account_circle_outlined), Size(195.0.w, 45.0.h), "Регистрация / Вход", () {
             Navigator.push(
               context, 
               MaterialPageRoute(builder: (contex) => RegistrationScreen()));
           }, Color(0xFF6750A4), Color(0xFFFFFFFF)),
           SizedBox(height: 9),
-          ButtonIcon.withStandardColor(Icon(Icons.double_arrow_outlined), Size(165.0, 36.0), "Зайти как гость", () {
+          ButtonIcon.withStandardColor(Icon(Icons.double_arrow_outlined), Size(165.0.w, 36.0.h), "Зайти как гость", () {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) {

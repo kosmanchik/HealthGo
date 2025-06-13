@@ -12,8 +12,9 @@ class ExerciseScreen extends StatefulWidget{
   
   final ImageSection _exerciseImage;
   final int _secondsTime;
+  final String instruction;
 
-  const ExerciseScreen(this._exerciseImage, this._secondsTime, {super.key});
+  const ExerciseScreen(this._exerciseImage, this._secondsTime, this. instruction, {super.key});
 
   @override
   State<ExerciseScreen> createState() => _ExerciseScreenState();
@@ -77,7 +78,56 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
       
           children: [
-            
+            // кнопка инструкции
+            ElevatedButton(
+                onPressed: () {
+                _timer.cancel();
+                showDialog(
+                  context: context,
+                  builder:
+                    (context) => AlertDialog(
+                      title: Text("Инструкция"),
+                      content: Text(widget.instruction),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            StartTimer();
+                          },
+                          child: Text("Понятно"),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFECE6F0),
+                  minimumSize: Size(356, 74),
+                  foregroundColor: Color(0xFF1D1B20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28),
+                  )
+                ), 
+                child: SizedBox(
+                  height: 32,
+                  width: 308,
+                  child: Row( 
+                    spacing: 155,
+                    children: [
+                      Text("Инструкция", 
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                        ),  
+                      ),
+                      Icon(Icons.expand_more),
+                    ],
+                  )
+                ),
+              ),
+
+            SizedBox(height: 40),
             widget._exerciseImage, //изображение упражнения
       
             SizedBox(height: 16),
